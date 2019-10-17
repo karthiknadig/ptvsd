@@ -64,6 +64,7 @@ def build_extension(dir_name, extension_name, target_pydevd_name, force_cython, 
         assert os.path.exists(pyx_file)
 
     try:
+        c_files = [os.path.join(dir_name, "%s.c" % target_pydevd_name), ]
         if force_cython:
             from Cython.Build import cythonize  # @UnusedImport
             # Generate the .c files in cythonize (will not compile at this point).
@@ -74,7 +75,6 @@ def build_extension(dir_name, extension_name, target_pydevd_name, force_cython, 
             # This is needed in CPython 3.8 to access PyInterpreterState.eval_frame.
             # i.e.: we change #include "pystate.h" to also #include "internal/pycore_pystate.h"
             # if compiling on Python 3.8.
-            c_files = [os.path.join(dir_name, "%s.c" % target_pydevd_name), ]
             for c_file in c_files:
                 with open(c_file, 'r') as stream:
                     c_file_contents = stream.read()
